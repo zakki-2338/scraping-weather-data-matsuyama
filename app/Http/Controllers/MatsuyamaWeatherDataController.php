@@ -71,6 +71,10 @@ class MatsuyamaWeatherDataController extends Controller
                 $this->tryScraping->tryScraping($oneYearAgoYear, $oneYearAgoMonth, $oneYearAgoDay, $oneDayAgoYear, $oneDayAgoMonth, $oneDayAgoDay, $year, $month, $newUrl);
             }
         }
-        return redirect('/');
+
+        // 保存されたデータを取得
+        $matsuyamaWeatherData = MatsuyamaWeatherDatum::all();
+
+        return view('MatsuyamaWeatherData.top', ['matsuyamaWeatherData' => $matsuyamaWeatherData]);
     }
 }

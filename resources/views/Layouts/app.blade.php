@@ -9,7 +9,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
 
-    <body class="bg-[#F2F0E9] min-h-screen">
+    <body class="bg-[#F2F0E9] pb-10 min-h-screen">
         <div>
             {{-- エラーメッセージ --}}
             @include('Commons.error_messages')

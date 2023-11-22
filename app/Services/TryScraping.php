@@ -23,23 +23,23 @@ class TryScraping
         for ($i = $startDay; $i < $endDay; $i++) {
             try {
                 // 年と月を結合して表示
-                $observation_date = $year . '-' . $month . '-' . $mtxElements[$i]->find('.a_print', 0)->plaintext;
+                $observation_date = $year . '-' . $month . '-' . $mtxElements[$i]->find('td', 0)->plaintext;
                 // 降水量の各要素が'--'の場合はnullと表示'
-                $precipitation_total = $mtxElements[$i]->find('td', 3)->plaintext;
-                $precipitation_total = str_replace([')', ']', ' '], '', $precipitation_total);
+                $precipitation_total_element = $mtxElements[$i]->find('td', 3);
+                $precipitation_total = ($precipitation_total_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $precipitation_total_element->plaintext) : null;
                 $precipitation_total = $precipitation_total !== '--' ? $precipitation_total : null;
-                $precipitation_max_1h = $mtxElements[$i]->find('td', 4)->plaintext;
-                $precipitation_max_1h = str_replace([')', ']', ' '], '', $precipitation_max_1h);
+                $precipitation_max_1h_element = $mtxElements[$i]->find('td', 4);
+                $precipitation_max_1h = ($precipitation_max_1h_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $precipitation_max_1h_element->plaintext) : null;
                 $precipitation_max_1h = $precipitation_max_1h !== '--' ? $precipitation_max_1h : null;
-                $precipitation_max_10min = $mtxElements[$i]->find('td', 5)->plaintext;
-                $precipitation_max_10min = str_replace([')', ']', ' '], '', $precipitation_max_10min);
+                $precipitation_max_10min_element = $mtxElements[$i]->find('td', 5);
+                $precipitation_max_10min = ($precipitation_max_10min_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $precipitation_max_10min_element->plaintext) : null;
                 $precipitation_max_10min = $precipitation_max_10min !== '--' ? $precipitation_max_10min : null;
-                $temperature_avg = $mtxElements[$i]->find('td', 6)->plaintext;
-                $temperature_avg = str_replace([')', ']', ' '], '', $temperature_avg);
-                $temperature_max = $mtxElements[$i]->find('td', 7)->plaintext;
-                $temperature_max = str_replace([')', ']', ' '], '', $temperature_max);
-                $temperature_min = $mtxElements[$i]->find('td', 8)->plaintext;
-                $temperature_min = str_replace([')', ']', ' '], '', $temperature_min);
+                $temperature_avg_element = $mtxElements[$i]->find('td', 6);
+                $temperature_avg = ($temperature_avg_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $temperature_avg_element->plaintext) : null;
+                $temperature_max_element = $mtxElements[$i]->find('td', 7);
+                $temperature_max = ($temperature_max_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $temperature_max_element->plaintext) : null;
+                $temperature_min_element = $mtxElements[$i]->find('td', 8);
+                $temperature_min = ($temperature_min_element->plaintext !== '') ? str_replace([')', ']', ' '], '', $temperature_min_element->plaintext) : null;
             
                 // MatsuyamaWeatherDatumモデルのインスタンスを作成
                 $matsuyamaWeatherDatum = new MatsuyamaWeatherDatum();

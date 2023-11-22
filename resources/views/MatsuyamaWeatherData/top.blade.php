@@ -5,7 +5,7 @@
 {{-- @extendsで呼び出したビューファイルの中の、対応する@yeildに情報を表示するためのディレクティブ --}}
 @section('content')
 
-<h1 class="pt-10 text-2xl text-center">松山市の気象データ</h1>
+<h1 class="pt-10 text-2xl text-center">愛媛県松山市の気象データ</h1>
 <h2 class="mt-1 text-base text-center">過去1年間の気象データを取得できます</h2>
 <div class="mt-10 flex justify-center items-center">
     <h3>本日の日付:{{ date('Y年m月d日') }}</h3>
@@ -18,7 +18,6 @@
 
 @if(isset($matsuyamaWeatherData) && $matsuyamaWeatherData->count() > 0)
     <table class="mt-5 mx-auto border border-collapse border-slate-400">
-        <caption class="caption-bottom text-left">※前日のデータは翌日1:00以降取得できます</caption>
         <thead>
             <tr>
                 <th rowspan="3" class="border border-slate-400">日</th>

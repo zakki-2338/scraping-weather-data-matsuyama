@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MatsuyamaWeatherDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MatsuyamaWeatherDataController::class, 'top']);
+Route::post('/', [MatsuyamaWeatherDataController::class, 'weatherDataStore'])->name('weather.data.store');

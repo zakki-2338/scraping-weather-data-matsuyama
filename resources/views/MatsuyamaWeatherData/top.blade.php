@@ -51,6 +51,126 @@
             @endforeach
         </tbody>
     </table>
+
+    <div class="mt-10 mx-auto w-11/12 max-w-3xl">
+        <!-- プルダウンメニュー -->
+        <!-- セレクトボックスの値が変更されたときにupdateChart関数を呼び出す -->
+        <select id="monthSelect" class="block ml-auto" onchange="updateChart()">
+            @for ($year = $oneYearAgoYear; $year <= $oneDayAgoYear; $year++)
+                @for ($month = ($year == $oneYearAgoYear ? $oneYearAgoMonth : 1); $month <= ($year == $oneDayAgoYear ? $oneDayAgoMonth : 12); $month++)
+                    <option value="{{ sprintf('%d-%02d', $year, $month) }}" {{ $year == $oneDayAgoYear && $month == $oneDayAgoMonth ? 'selected' : '' }}>
+                        {{ sprintf('%d-%02d', $year, $month) }}
+                    </option>
+                @endfor
+            @endfor
+        </select>
+
+        <canvas id="weatherDataChart" class="mt-5 p-2 w-full aspect-video bg-white"></canvas>
+    </div>
+
+    <script>
+        // 変数を初期化
+        let weatherDataChart;
+
+        function updateChart() {
+            let selectedMonth = document.getElementById('monthSelect').value;
+
+            // $matsuyamaWeatherDataから天気データを取得
+            let matsuyamaWeatherData = {!! json_encode($matsuyamaWeatherData) !!};
+    
+            // 2023年11月分の日付、降水量合計、平均気温データを格納する空の配列を作成
+            let dates = [];
+            let precipitationTotal = [];
+            let temperatureAvg = [];
+    
+            // 空の配列に、日付、降水量合計、平均気温データを格納
+            matsuyamaWeatherData.forEach(function(data) {
+                if (data.observation_date.includes(selectedMonth)) {
+                    dates.push(data.observation_date);
+                    precipitationTotal.push(data.precipitation_total);
+                    temperatureAvg.push(data.temperature_avg);
+                }
+            });
+            
+            // 日付フォーマットを変更
+            let dayLabels = dates.map(function(date) {
+                return parseInt(date.split('-')[2]);  // 日付から日を取り出して整数に変換
+            });
+        
+            // ID=weatherDataChartに対して2次元の描画コンテキストを取得
+            // これにより線を引く、テキストを描画する等が可能
+            // 2dは2D描画に特化した描画コンテキストを取得するメソッド
+            let ctx = document.getElementById('weatherDataChart').getContext('2d');
+
+            // グラフを描画する前に既存のChartを破棄
+            if (weatherDataChart) {
+                weatherDataChart.destroy();
+            }
+
+            // Chart.jsを使用して新しいチャートオブジェクトを作成
+            weatherDataChart = new Chart(ctx, {
+                data: {
+                    datasets: [
+                        {
+                            data: temperatureAvg,
+                            label: '平均気温',
+                            type: 'line',
+                            borderColor: 'red',
+                            yAxisID: 'left-y-axis',
+                        },
+                        {
+                            data: precipitationTotal,
+                            label: '降水量合計',
+                            type: 'bar',
+                            backgroundColor: '#8EB4E3',
+                            yAxisID: 'right-y-axis',
+                        },
+                    ],
+                    labels: dayLabels
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        'left-y-axis': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: '気温(℃)'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        'right-y-axis': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: '降水量(mm)'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初期表示時にもグラフを描画
+        updateChart();
+    </script>
 @endif
 
 @endsection

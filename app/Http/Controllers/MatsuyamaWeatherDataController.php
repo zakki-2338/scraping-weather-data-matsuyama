@@ -75,6 +75,12 @@ class MatsuyamaWeatherDataController extends Controller
         // 保存されたデータを取得
         $matsuyamaWeatherData = MatsuyamaWeatherDatum::all();
 
-        return view('MatsuyamaWeatherData.top', ['matsuyamaWeatherData' => $matsuyamaWeatherData]);
+        return view('MatsuyamaWeatherData.top', [
+            'matsuyamaWeatherData' => $matsuyamaWeatherData,
+            'oneYearAgoYear' => $oneYearAgoYear,
+            'oneYearAgoMonth' => $oneYearAgoMonth,
+            'oneDayAgoYear' => $oneDayAgoYear,
+            'oneDayAgoMonth' => $oneDayAgoMonth,
+        ]);
     }
 }
